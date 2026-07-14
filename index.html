@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rhys — building in public</title>
+<meta name="description" content="Three apps, shipped in the open: WineClub, Bloomfit, and Candlecademy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#0B0D11; --bg2:#0C0A0C; --panel:#14171C; --line:rgba(255,255,255,.07);
+    --warm:#F3EEE6; --mut:#9AA0AA; --body:#C9CDD4;
+    --wine:#DE6E8C; --bloom:#5BD6A2; --candle:#F0B24C;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; min-height:100vh; color:var(--warm);
+    font-family:'Space Grotesk',system-ui,-apple-system,sans-serif;
+    background:
+      radial-gradient(1100px 460px at 50% -12%, #1a212b 0%, transparent 62%),
+      linear-gradient(180deg,var(--bg1),var(--bg2));
+    display:flex; flex-direction:column; align-items:center;
+    padding:60px 20px 44px;
+  }
+  .wrap{width:100%; max-width:760px}
+  header{text-align:center; margin-bottom:42px}
+  h1{font-size:clamp(28px,6vw,34px); font-weight:700; letter-spacing:-.6px; margin:0 0 10px}
+  .sub{font-family:'JetBrains Mono',monospace; color:var(--mut); font-size:14px; line-height:1.6; margin:0}
+  .apps{display:grid; grid-template-columns:1fr; gap:18px}
+  @media(min-width:660px){.apps{grid-template-columns:repeat(3,1fr)}}
+  .card{
+    position:relative; overflow:hidden; text-align:center;
+    background:var(--panel); border:1px solid var(--line); border-radius:20px;
+    padding:26px 20px 24px; transition:transform .18s ease, border-color .18s ease;
+  }
+  .card::before{
+    content:""; position:absolute; left:0; right:0; top:0; height:130px; pointer-events:none;
+    background:radial-gradient(130px 96px at 50% 0, var(--accent), transparent 72%); opacity:.18;
+  }
+  .card:hover{transform:translateY(-4px); border-color:color-mix(in srgb, var(--accent) 45%, transparent)}
+  .icon{position:relative; height:92px; display:flex; align-items:center; justify-content:center; margin-bottom:4px}
+  .icon svg{height:92px; width:auto; overflow:visible}
+  .name{font-size:22px; font-weight:700; margin:8px 0 3px}
+  .tag{font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--mut); margin:0 0 13px}
+  .desc{font-size:14px; line-height:1.55; color:var(--body); margin:0 0 20px}
+  .cta{
+    display:inline-block; font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:500;
+    text-decoration:none; padding:10px 16px; border-radius:11px;
+    background:var(--accent); color:#0B0D11; transition:filter .15s ease;
+  }
+  .cta:hover{filter:brightness(1.08)}
+  .cta--soon{background:transparent; color:var(--accent); border:1px solid color-mix(in srgb, var(--accent) 42%, transparent)}
+  .card--wine{--accent:var(--wine)}
+  .card--bloom{--accent:var(--bloom)}
+  .card--candle{--accent:var(--candle)}
+  footer{margin-top:44px; display:flex; flex-wrap:wrap; gap:22px; justify-content:center;
+    font-family:'JetBrains Mono',monospace; font-size:13px}
+  footer a{color:var(--mut); text-decoration:none; transition:color .15s ease}
+  footer a:hover{color:var(--warm)}
+  a:focus-visible, .cta:focus-visible{outline:2px solid var(--candle); outline-offset:3px; border-radius:6px}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<!-- shared icon defs (gradients + glow), hidden -->
+<svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs><linearGradient id="wineFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#B23A5B"/><stop offset="100%" stop-color="#6E1F38"/></linearGradient>
+<linearGradient id="glass" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.10"/><stop offset="45%" stop-color="#ffffff" stop-opacity="0.02"/><stop offset="100%" stop-color="#B23A5B" stop-opacity="0.10"/></linearGradient>
+<linearGradient id="petalF" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FF8C79"/><stop offset="60%" stop-color="#4FC895"/><stop offset="100%" stop-color="#2FA76A"/></linearGradient>
+<linearGradient id="petalB" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2E9E70"/><stop offset="100%" stop-color="#1F7D53"/></linearGradient>
+<radialGradient id="bcenter" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#FFE9AE"/><stop offset="60%" stop-color="#EBA53C"/><stop offset="100%" stop-color="#D07E22"/></radialGradient>
+<linearGradient id="cGreen" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#57D197"/><stop offset="100%" stop-color="#2BA163"/></linearGradient>
+<linearGradient id="cRed" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F27B74"/><stop offset="100%" stop-color="#D3423C"/></linearGradient>
+<radialGradient id="flame" cx="50%" cy="35%" r="65%"><stop offset="0%" stop-color="#FFF1C2"/><stop offset="40%" stop-color="#EBA53C"/><stop offset="100%" stop-color="#E7752C"/></radialGradient>
+<filter id="glow" x="-120%" y="-120%" width="340%" height="340%"><feGaussianBlur stdDeviation="9"/></filter></defs></svg>
+
+<main class="wrap">
+  <header>
+    <h1>Rhys</h1>
+    <!-- edit these two lines / your handle -->
+    <p class="sub">I build small apps in public.<br>Here's what I'm shipping right now &#8595;</p>
+  </header>
+
+  <section class="apps">
+
+    <!-- ===== WineClub ===== -->
+    <article class="card card--wine">
+      <div class="icon"><svg viewBox="296 104 128 168" role="img" aria-label="WineClub"><ellipse cx="370" cy="188" rx="44" ry="60" fill="#B23A5B" opacity="0.18" filter="url(#glow)"/>
+<path d="M330 132 C330 178 348 206 370 206 C392 206 410 178 410 132 Z" fill="url(#glass)" stroke="#DE6E8C" stroke-width="2.5"/>
+<path d="M339 167 C339 189 353 205 370 205 C387 205 401 189 401 167 Z" fill="url(#wineFill)"/>
+<ellipse cx="370" cy="167" rx="31" ry="5.5" fill="#C24E6E"/>
+<ellipse cx="370" cy="166" rx="20" ry="2.6" fill="#E68AA4" opacity="0.7"/>
+<ellipse cx="370" cy="132" rx="40" ry="9" fill="none" stroke="#DE6E8C" stroke-width="2.5"/>
+<path d="M344 140 C340 165 346 185 358 200" stroke="#ffffff" stroke-opacity="0.35" stroke-width="3" fill="none" stroke-linecap="round"/>
+<rect x="367.5" y="205" width="5" height="45" rx="2.5" fill="#DE6E8C"/>
+<ellipse cx="370" cy="252" rx="35" ry="6.5" fill="none" stroke="#DE6E8C" stroke-width="2.5"/></svg></div>
+      <h2 class="name">WineClub</h2>
+      <p class="tag">log every bottle you love</p>
+      <p class="desc">Keep a running record of every wine you taste, so you never buy the same forgettable bottle twice.</p>
+      <!-- when live, set href to the App Store / TestFlight link and change label -->
+      <a class="cta cta--soon" href="#">Coming soon</a>
+    </article>
+
+    <!-- ===== Bloomfit ===== -->
+    <article class="card card--bloom">
+      <div class="icon"><svg viewBox="678 100 144 168" role="img" aria-label="Bloomfit"><ellipse cx="750" cy="180" rx="52" ry="52" fill="#35C08A" opacity="0.16" filter="url(#glow)"/>
+<path d="M750 210 q 3 22 1 40" stroke="#2FA76A" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+<path d="M751 236 q 17 -5 28 -19 q -15 1 -28 19" fill="#2FA76A"/>
+<g transform="translate(750,178) rotate(30)"><ellipse cx="0" cy="-31" rx="15" ry="32" fill="url(#petalB)" opacity="0.95"/></g>
+<g transform="translate(750,178) rotate(90)"><ellipse cx="0" cy="-31" rx="15" ry="32" fill="url(#petalB)" opacity="0.95"/></g>
+<g transform="translate(750,178) rotate(150)"><ellipse cx="0" cy="-31" rx="15" ry="32" fill="url(#petalB)" opacity="0.95"/></g>
+<g transform="translate(750,178) rotate(210)"><ellipse cx="0" cy="-31" rx="15" ry="32" fill="url(#petalB)" opacity="0.95"/></g>
+<g transform="translate(750,178) rotate(270)"><ellipse cx="0" cy="-31" rx="15" ry="32" fill="url(#petalB)" opacity="0.95"/></g>
+<g transform="translate(750,178) rotate(330)"><ellipse cx="0" cy="-31" rx="15" ry="32" fill="url(#petalB)" opacity="0.95"/></g>
+<g transform="translate(750,178) rotate(0)"><ellipse cx="0" cy="-31" rx="15" ry="29" fill="url(#petalF)" opacity="1"/></g>
+<g transform="translate(750,178) rotate(60)"><ellipse cx="0" cy="-31" rx="15" ry="29" fill="url(#petalF)" opacity="1"/></g>
+<g transform="translate(750,178) rotate(120)"><ellipse cx="0" cy="-31" rx="15" ry="29" fill="url(#petalF)" opacity="1"/></g>
+<g transform="translate(750,178) rotate(180)"><ellipse cx="0" cy="-31" rx="15" ry="29" fill="url(#petalF)" opacity="1"/></g>
+<g transform="translate(750,178) rotate(240)"><ellipse cx="0" cy="-31" rx="15" ry="29" fill="url(#petalF)" opacity="1"/></g>
+<g transform="translate(750,178) rotate(300)"><ellipse cx="0" cy="-31" rx="15" ry="29" fill="url(#petalF)" opacity="1"/></g>
+<circle cx="750" cy="178" r="16" fill="url(#bcenter)"/>
+<circle cx="745" cy="174" r="2" fill="#B5711A" opacity="0.8"/>
+<circle cx="755" cy="176" r="2" fill="#B5711A" opacity="0.8"/>
+<circle cx="750" cy="183" r="2" fill="#B5711A" opacity="0.8"/></svg></div>
+      <h2 class="name">Bloomfit</h2>
+      <p class="tag">small habits, big bloom</p>
+      <!-- TODO: replace with what Bloomfit actually does -->
+      <p class="desc">Small daily habits that actually stick. (Swap this line for the real pitch.)</p>
+      <a class="cta cta--soon" href="#">Coming soon</a>
+    </article>
+
+    <!-- ===== Candlecademy ===== -->
+    <article class="card card--candle">
+      <div class="icon"><svg viewBox="1044 78 152 174" role="img" aria-label="Candlecademy"><g stroke-linecap="round">
+<polyline points="1054,208 1088,182 1130,150 1172,130" fill="none" stroke="#EBA53C" stroke-width="2.2" stroke-opacity="0.7" stroke-dasharray="2 7"/>
+<line x1="1088" y1="164" x2="1088" y2="230" stroke="#E5544E" stroke-width="2.5"/>
+<rect x="1077" y="176" width="22" height="40" rx="4" fill="url(#cRed)"/>
+<line x1="1130" y1="142" x2="1130" y2="236" stroke="#3FB96A" stroke-width="2.5"/>
+<rect x="1119" y="158" width="22" height="60" rx="4" fill="url(#cGreen)"/>
+<line x1="1172" y1="126" x2="1172" y2="238" stroke="#3FB96A" stroke-width="2.5"/>
+<rect x="1161" y="140" width="22" height="86" rx="4" fill="url(#cGreen)"/>
+<ellipse cx="1172" cy="110" rx="20" ry="26" fill="#EBA53C" opacity="0.5" filter="url(#glow)"/>
+<path d="M1172 94 C1186 109 1184 124 1172 126 C1160 124 1158 111 1172 94 Z" fill="url(#flame)"/>
+<path d="M1172 106 C1178 113 1177 120 1172 125 C1167 120 1166 113 1172 106 Z" fill="#FFF1C2" opacity="0.9"/>
+</g></svg></div>
+      <h2 class="name">Candlecademy</h2>
+      <p class="tag">learn to read the charts</p>
+      <p class="desc">Learn to read candlestick charts the fun way: bite-size lessons, a live trade simulator, and XP.</p>
+      <!-- paste your TestFlight public link here -->
+      <a class="cta" href="#">Join the beta &#8594;</a>
+    </article>
+
+  </section>
+
+  <footer>
+    <!-- edit these -->
+    <a href="https://x.com/rhysbuilds" target="_blank" rel="noopener">X / @rhysbuilds</a>
+    <a href="https://github.com/RhysBGit" target="_blank" rel="noopener">GitHub</a>
+    <a href="mailto:you@example.com">Email</a>
+  </footer>
+</main>
+</body>
+</html>
